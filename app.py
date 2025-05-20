@@ -131,7 +131,7 @@ def fig_to_img(fig):
 
     
 st.title("Graph Creator Tool")
-upload_file = st.file_uploader("Load Csv", type=['csv', 'xls', 'xlsx', 'json'])
+upload_file = st.file_uploader("Load File", type=['csv', 'xls', 'xlsx', 'json'])
 
 if upload_file is not None:
     file_name = upload_file.name
