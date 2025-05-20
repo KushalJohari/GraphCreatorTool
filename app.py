@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
 from io import BytesIO
+import os
 
 Data = None
 
@@ -130,11 +131,23 @@ def fig_to_img(fig):
 
     
 st.title("Graph Creator Tool")
-upload_file = st.file_uploader("Load Csv", type='csv')
+upload_file = st.file_uploader("Load Csv", type=['csv', 'xls', 'xlsx', 'json'])
 
 if upload_file is not None:
-    Data = pd.read_csv(upload_file)
-    st.success("Your file is uploaded!")
+    file_name = upload_file.name
+    ext = os.path.splitext(file_name)[1].lower()
+
+    if ext == '.csv':
+        Data = pd.read_csv(upload_file)
+    elif ext in ['.xlsx', '.xls']:
+        Data = pd.read_excel(upload_file)
+    elif ext == '.json':
+        Data = pd.read_json(upload_file)
+    else:
+        st.error("Unsupported file format!")
+
+    if 'Data' in locals():
+        st.success(f"{ext.upper()[1:]} file uploaded successfully!")
 
 if Data is not None and not Data.empty:
     columns = [None] + Data.columns.to_list()
